@@ -36,7 +36,6 @@ class UsuariosController extends Controller
 
 
         return response($usuario, 200);
-
     }
 
     public function listar()
@@ -44,7 +43,6 @@ class UsuariosController extends Controller
         $usuario = User::select('id', 'name', 'email')->get();
 
         return response($usuario, 200);
-
     }
 
     public function deletar($id)
@@ -60,7 +58,6 @@ class UsuariosController extends Controller
         $usuario->delete();
 
         return response('', 200);
-
     }
 
     public function editar(Request $request, $id)
@@ -70,7 +67,9 @@ class UsuariosController extends Controller
         $usuario = User::where('id', $id)->first();
         $usuario->email = $request->email;
         $usuario->name = $request->name;
-        $usuario->password = bcrypt($request->password);
+        if (isset($request->password) && $request->password != '') {
+            $usuario->password = bcrypt($request->password);
+        }
         $usuario->updated_by = auth()->id();
         $usuario->save();
 
@@ -83,15 +82,15 @@ class UsuariosController extends Controller
         // dd($id, $request->all());
 
         $usuario = User::where('id', $id)->first();
-        if(isset($request->email))
+        if (isset($request->email))
             $usuario->email = $request->email;
-    
-        if(isset($request->name))
+
+        if (isset($request->name))
             $usuario->name = $request->name;
 
-        if(isset($request->password))
+        if (isset($request->password))
             $usuario->password = bcrypt($request->password);
-    
+
         $usuario->updated_by = auth()->id();
         $usuario->save();
 
@@ -99,7 +98,7 @@ class UsuariosController extends Controller
         return response($usuario, 200);
     }
 
-    
+
     public function lerUm($id)
     {
         $usuario = User::where('id', $id)->first()->makeHidden(['password']);
@@ -109,7 +108,5 @@ class UsuariosController extends Controller
 
 
         return response($usuario, 200);
-
     }
-
 }
