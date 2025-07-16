@@ -25,12 +25,12 @@ Route::middleware('auth:api')->group(function () {
     Route::get('me', [AuthController::class, 'me']); // Rota para obter o usuário autenticado
 
     Route::prefix('Gerenciar')->group(function(){
+        Route::post('/criar', [UsuariosController::class, 'criar']); // criar um novo dado
         Route::get('/consultar/{id}', [UsuariosController::class, 'consultar']);//consultar 1 individualmente
         Route::get('/listar', [UsuariosController::class, 'listar']); // listar todos
         Route::delete('/deletar/{id}', [UsuariosController::class, 'deletar']); // deletar um unico dado
         Route::put('/editar/{id}', [UsuariosController::class, 'editar']); // editar um unico dado
         Route::patch('/editarParcial/{id}', [UsuariosController::class, 'editarParcial']); // editar um unico dado
-        Route::get('/lerUm/{id}', [UsuariosController::class, 'lerUm']);//consultar 1 individualmente
     });
 });
 

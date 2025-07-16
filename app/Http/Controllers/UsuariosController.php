@@ -9,23 +9,29 @@ use Illuminate\Http\Request;
 
 class UsuariosController extends Controller
 {
-    public function cadastrar(Request $request)
-    {
+    public function criar(Request $request)
+    {   
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:6',
+        ]);
+
         $usuarioQtd = User::where('email', $request->email)->count();
+        if ($usuarioQtd > 0) {
+            return response()->json(['message' => 'E-mail já cadastrado!'], 409);
+        }
 
-        if ($usuarioQtd > 0)
-            return response('', 409);
-
-        // Cria um novo usuário
         $usuario = new User();
-        $usuario->email = $request->email;
         $usuario->name = $request->name;
+        $usuario->email = $request->email;
         $usuario->password = bcrypt($request->password);
-        $usuario->created_by = 0;
+        $usuario->created_by = auth()->id();
         $usuario->save();
 
         return response($usuario, 201);
     }
+
 
     public function consultar($id)
     {
@@ -93,18 +99,6 @@ class UsuariosController extends Controller
 
         $usuario->updated_by = auth()->id();
         $usuario->save();
-
-
-        return response($usuario, 200);
-    }
-
-
-    public function lerUm($id)
-    {
-        $usuario = User::where('id', $id)->first()->makeHidden(['password']);
-
-        if ($usuario == null)
-            return response('', 404);
 
 
         return response($usuario, 200);
