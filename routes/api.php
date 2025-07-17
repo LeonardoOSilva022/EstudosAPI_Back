@@ -2,8 +2,10 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UsuariosController;
+use App\Http\Controllers\GeminiController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -29,6 +31,7 @@ Route::middleware('auth:api')->group(function () {
         Route::get('/consultar/{id}', [UsuariosController::class, 'consultar']);//consultar 1 individualmente
         Route::get('/listar', [UsuariosController::class, 'listar']); // listar todos
         Route::delete('/deletar/{id}', [UsuariosController::class, 'deletar']); // deletar um unico dado
+        Route::post('/gerar-ideia', [GeminiController::class, 'gerarIdeia']);// IA do Gemini
         Route::put('/editar/{id}', [UsuariosController::class, 'editar']); // editar um unico dado
         Route::patch('/editarParcial/{id}', [UsuariosController::class, 'editarParcial']); // editar um unico dado
     });
